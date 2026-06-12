@@ -1,0 +1,5 @@
+streamlit==1.45.1
+pandas==2.2.3
+huggingface-hub==1.19.0
+faker==40.23.0
+python-dotenv==1.1.0
