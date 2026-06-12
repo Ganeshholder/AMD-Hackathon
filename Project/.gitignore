@@ -18,9 +18,9 @@ venv/
 .venv/
 env/
 
-# Database
-*.db
-*.sqlite3
+# Database — uncomment below to exclude DB from git
+# *.db
+# *.sqlite3
 
 # Streamlit
 .streamlit/secrets.toml
