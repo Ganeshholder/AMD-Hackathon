@@ -17,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- Sidebar navigation ---
+# --- Sidebar navigation --
 with st.sidebar:
     st.title("🔍 Analytics App")
     st.divider()
