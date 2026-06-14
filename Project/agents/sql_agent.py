@@ -10,8 +10,8 @@ from agents.llm_client import get_sql_client, generate
 
 def _build_schema_ddl(tables: list[str]) -> str:
     """
-    Build a DDL-style schema string — the format sqlcoder-7b-2 was trained on.
-    Column comments make the model less likely to hallucinate JOINs.
+    Build a DDL-style schema string with column descriptions AND sample values.
+    Sample values in comments help the model map user-provided values to the correct column.
     """
     lines = []
     for table in tables:
@@ -27,6 +27,64 @@ def _build_schema_ddl(tables: list[str]) -> str:
             f"CREATE TABLE {table} (\n{col_defs}\n);"
         )
     return "\n\n".join(lines)
+
+
+def _strip_invalid_joins(sql: str, allowed_tables: list[str]) -> str:
+    """
+    Remove any JOIN clauses that reference tables not in the allowed list.
+    Also fix dangling alias prefixes left behind after JOIN removal.
+    """
+    alias_map: dict[str, str] = {}
+    for m in re.finditer(
+        r"\b(?:LEFT\s+|RIGHT\s+|INNER\s+|OUTER\s+|FULL\s+|CROSS\s+)?JOIN\s+(\w+)\s+(\w+)\b",
+        sql,
+        flags=re.IGNORECASE,
+    ):
+        table_name, alias = m.group(1), m.group(2)
+        if alias.upper() not in ("ON", "WHERE", "SET"):
+            alias_map[alias] = table_name
+
+    if len(allowed_tables) == 1:
+        sql = re.sub(
+            r"\b(?:LEFT\s+|RIGHT\s+|INNER\s+|OUTER\s+|FULL\s+|CROSS\s+)?JOIN\s+\w+(?:\s+\w+)?\s+ON\s+[^\n]+",
+            "",
+            sql,
+            flags=re.IGNORECASE,
+        )
+        sql = re.sub(
+            r"\b(?:LEFT\s+|RIGHT\s+|INNER\s+|OUTER\s+|FULL\s+|CROSS\s+)?JOIN\s+\w+(?:\s+\w+)?",
+            "",
+            sql,
+            flags=re.IGNORECASE,
+        )
+    else:
+        known = set(t.lower() for t in allowed_tables)
+
+        def _remove_if_unknown(m: re.Match) -> str:
+            join_table = m.group(1).lower()
+            if join_table not in known:
+                alias_map[m.group(2)] = join_table
+                return ""
+            return m.group(0)
+
+        sql = re.sub(
+            r"\b(?:LEFT\s+|RIGHT\s+|INNER\s+|OUTER\s+|FULL\s+|CROSS\s+)?JOIN\s+(\w+)\s+(\w+)\s+ON\s+[^\n]+",
+            _remove_if_unknown,
+            sql,
+            flags=re.IGNORECASE,
+        )
+
+    known_set = set(t.lower() for t in allowed_tables)
+    for alias, table in alias_map.items():
+        if table.lower() not in known_set:
+            sql = re.sub(
+                rf"\b{re.escape(alias)}\.([\w]+)",
+                r"\1",
+                sql,
+            )
+
+    sql = re.sub(r"[ \t]{2,}", " ", sql).strip()
+    return sql
 
 
 def _count_unquoted_parens(sql: str) -> tuple[int, int]:
@@ -74,14 +132,12 @@ def _balance_parens(sql: str) -> str:
             depth += 1
         elif ch == ")":
             if depth == 0:
-                remove.add(i)   # unmatched — mark for removal
+                remove.add(i)
             else:
                 depth -= 1
 
-    # Remove marked positions
     sql = "".join(ch for i, ch in enumerate(chars) if i not in remove)
 
-    # If still unbalanced the other way (more opens), append closing parens
     opens, closes = _count_unquoted_parens(sql)
     if opens > closes:
         sql += ")" * (opens - closes)
@@ -92,15 +148,7 @@ def _balance_parens(sql: str) -> str:
 def _fix_sqlite_compat(sql: str) -> str:
     """
     Post-process the generated SQL to fix common model mistakes.
-
-    Fixes applied in order:
-    1. ILIKE  → LOWER(col) LIKE LOWER('val')
-    2. col = 'string' or col == 'string' → LOWER(col) LIKE LOWER('%string%')
-    3. Unicode comparison operators → ASCII (≥ → >=, ≤ → <=, ≠ → !=)
-    4. PostgreSQL interval syntax → SQLite date() function
-    5. Unbalanced parentheses
     """
-
     # Fix 1: ILIKE → LOWER LIKE LOWER
     sql = re.sub(
         r"([\w\.]+)\s+ILIKE\s+('[^']*')",
@@ -123,10 +171,10 @@ def _fix_sqlite_compat(sql: str) -> str:
         flags=re.IGNORECASE,
     )
 
-    # Fix 3: Unicode comparison operators → ASCII equivalents
+    # Fix 3: Unicode comparison operators → ASCII
     sql = sql.replace("≥", ">=").replace("≤", "<=").replace("≠", "!=").replace("→", "->")
 
-    # Fix 4: PostgreSQL/MySQL interval syntax → SQLite date() function
+    # Fix 4: PostgreSQL interval → SQLite date()
     sql = re.sub(
         r"(?:CURRENT_DATE|CURRENT_TIMESTAMP|NOW\(\))\s*-\s*interval\s*'(\d+)\s*(year|years|month|months|day|days|hour|hours|week|weeks)'",
         lambda m: f"date('now', '-{m.group(1)} {m.group(2)}')",
@@ -140,29 +188,28 @@ def _fix_sqlite_compat(sql: str) -> str:
         flags=re.IGNORECASE,
     )
 
-    # Fix 4b: strftime('%Y', column) where 'column' is a literal placeholder word
-    # Detect the actual date column from the FROM clause and substitute it
+    # Fix 4b: strftime('...', column) where 'column' is literally the word 'column'
     def _fix_strftime_placeholder(sql: str) -> str:
-        # Find the first table referenced in FROM
         from_match = re.search(r"\bFROM\s+([\w]+)", sql, re.IGNORECASE)
         if not from_match:
             return sql
-        # Guess the date column based on known table patterns
         table = from_match.group(1).lower()
         date_col_map = {
-            "palo_alto_logs": "log_date",
-            "transactions":   "created_at",
-            "log_table":      "log_time",
+            "palo_alto_logs":    "log_date",
+            "transactions":      "created_at",
+            "log_table":         "log_time",
+            "ping_identity_logs":"event_date",
+            "zscaler_logs":      "event_date",
+            "linux_logs":        "event_date",
+            "bluecoat_proxy_logs":"event_date",
         }
-        date_col = date_col_map.get(table, "created_at")
-        # Replace strftime('...', column) where column is literally the word 'column'
+        date_col = date_col_map.get(table, "event_date")
         sql = re.sub(
             r"(strftime\s*\(\s*'[^']+'\s*,\s*)\bcolumn\b",
             lambda m: f"{m.group(1)}{date_col}",
             sql,
             flags=re.IGNORECASE,
         )
-        # Also fix date(column) literal
         sql = re.sub(
             r"\bdate\s*\(\s*column\s*\)",
             f"date({date_col})",
@@ -173,7 +220,7 @@ def _fix_sqlite_compat(sql: str) -> str:
 
     sql = _fix_strftime_placeholder(sql)
 
-    # Fix 5: EXTRACT(part FROM col) → strftime() for SQLite
+    # Fix 5: EXTRACT(part FROM col) → strftime()
     _EXTRACT_MAP = {
         "year": "%Y", "month": "%m", "day": "%d",
         "hour": "%H", "minute": "%M", "second": "%S",
@@ -182,10 +229,9 @@ def _fix_sqlite_compat(sql: str) -> str:
         part = m.group(1).lower()
         col  = m.group(2)
         fmt  = _EXTRACT_MAP.get(part, f"%{part[0]}")
-        result = f"strftime('{fmt}', {col})"
         if part in ("year", "month", "day", "hour", "minute", "second"):
-            result = f"CAST(strftime('{fmt}', {col}) AS INTEGER)"
-        return result
+            return f"CAST(strftime('{fmt}', {col}) AS INTEGER)"
+        return f"strftime('{fmt}', {col})"
 
     sql = re.sub(
         r"EXTRACT\s*\(\s*(\w+)\s+FROM\s+([\w\.]+)\s*\)",
@@ -194,16 +240,12 @@ def _fix_sqlite_compat(sql: str) -> str:
         flags=re.IGNORECASE,
     )
 
-    # Fix 6: date_trunc('year', col)  → strftime('%Y', col)
-    #         date_trunc('month', col) → strftime('%Y-%m', col)
-    #         date_trunc('day', col)   → date(col)
+    # Fix 6: date_trunc()
     _TRUNC_MAP = {
-        "year":    ("%Y",    False),
-        "quarter": ("%Y",    False),   # approximate with year
-        "month":   ("%Y-%m", False),
-        "week":    ("%Y-%W", False),
-        "day":     (None,    True),    # use date() directly
-        "hour":    ("%Y-%m-%d %H", False),
+        "year":  ("%Y",    False),
+        "month": ("%Y-%m", False),
+        "day":   (None,    True),
+        "hour":  ("%Y-%m-%d %H", False),
     }
     def _date_trunc(m: re.Match) -> str:
         part = m.group(1).strip("'\"").lower()
@@ -221,26 +263,22 @@ def _fix_sqlite_compat(sql: str) -> str:
         flags=re.IGNORECASE,
     )
 
-    # Fix 7: DATE_FORMAT(col, fmt) → strftime(fmt, col)
+    # Fix 7: DATE_FORMAT / TO_CHAR
     sql = re.sub(
         r"DATE_FORMAT\s*\(\s*([\w\.]+)\s*,\s*('[^']*')\s*\)",
         lambda m: f"strftime({m.group(2)}, {m.group(1)})",
-        sql,
-        flags=re.IGNORECASE,
+        sql, flags=re.IGNORECASE,
     )
-
-    # Fix 8: TO_CHAR(col, fmt) → strftime(fmt, col)
     sql = re.sub(
         r"TO_CHAR\s*\(\s*([\w\.]+)\s*,\s*('[^']*')\s*\)",
         lambda m: f"strftime({m.group(2)}, {m.group(1)})",
-        sql,
-        flags=re.IGNORECASE,
+        sql, flags=re.IGNORECASE,
     )
 
-    # Fix 9: NULLS LAST / NULLS FIRST — not supported in SQLite, just remove
+    # Fix 8: NULLS LAST / FIRST
     sql = re.sub(r"\s+NULLS\s+(?:LAST|FIRST)", "", sql, flags=re.IGNORECASE)
 
-    # Fix 10: Balance parentheses
+    # Fix 9: Balance parentheses
     sql = _balance_parens(sql)
 
     return sql
@@ -258,50 +296,44 @@ def _extract_sql(raw: str) -> str:
 def generate_sql(question: str, tables: list[str]) -> str:
     """
     Generate a SQLite SQL query for the question using only the given tables.
-
-    Uses sqlcoder's recommended prompt format:
-    ### Task / ### Database Schema / ### Answer
-
-    Args:
-        question: Natural language question.
-        tables: Table names to include in the schema context.
-
-    Returns:
-        A SQLite-compatible SQL query string.
     """
-    schema_ddl = _build_schema_ddl(tables)
+    schema_ddl  = _build_schema_ddl(tables)
+    table_name  = tables[0] if len(tables) == 1 else ", ".join(tables)
+    alias_hint  = f"Use alias 't' for table '{tables[0]}'." if len(tables) == 1 else ""
 
     prompt = f"""### Task
 Generate a SQLite3 SQL query to answer the following question.
 You MUST generate valid SQLite3 syntax ONLY — not PostgreSQL, MySQL, or any other dialect.
 
 STRICT RULES:
-1. Use ONLY the tables and columns defined in the schema below.
-2. Do NOT use ILIKE — use LOWER(col) LIKE LOWER('%val%') instead.
-3. ALL text WHERE comparisons MUST use: LOWER(column) LIKE LOWER('%value%')
+1. Query ONLY this table: {table_name}. {alias_hint}
+2. NEVER use JOIN — this table contains all required columns. There are no related tables.
+3. NEVER invent or reference any table that is not in the schema below.
+4. NEVER use a table alias that does not match a table in the schema.
+5. SELECT all columns that are relevant to the question — do not limit to just one column unless asked.
+6. VALUE-TO-COLUMN MATCHING: Each column description lists its valid values after the colon.
+   Before writing a WHERE condition, read the column descriptions carefully and use the column
+   whose description mentions the value the user is asking about.
+   Example: if user says "blocked", find which column description contains "Blocked" — use THAT column.
+   NEVER guess — always match the value to the correct column from the schema description.
+7. Do NOT use ILIKE — use LOWER(col) LIKE LOWER('%val%') instead.
+8. ALL text WHERE comparisons MUST use: LOWER(column) LIKE LOWER('%value%')
    NEVER use = or == for text columns in WHERE.
-4. If a column comment says "NOT a foreign key", treat it as plain text — do NOT JOIN on it.
-5. Use only ASCII operators: >= <= != > < =   NEVER use: ≥ ≤ ≠
-6. Do NOT use NULLS LAST or NULLS FIRST — not supported in SQLite3.
+9. Use only ASCII operators: >= <= != > < =   NEVER use: ≥ ≤ ≠
+10. Do NOT use NULLS LAST or NULLS FIRST.
 
 SQLite3 DATE FUNCTIONS (use ONLY these):
-  - Current date:      date('now')
-  - Current datetime:  datetime('now')
-  - Last N days:       date('now', '-N days')      e.g. date('now', '-30 days')
-  - Last N months:     date('now', '-N months')    e.g. date('now', '-6 months')
-  - Last N years:      date('now', '-N years')     e.g. date('now', '-1 years')
-  - Extract year:      strftime('%Y', <col_name>)  e.g. strftime('%Y', log_date)
-  - Extract month:     strftime('%m', <col_name>)  e.g. strftime('%m', log_date)
-  - Extract day:       strftime('%d', <col_name>)  e.g. strftime('%d', log_date)
-  - Truncate to year:  strftime('%Y', <col_name>)
-  - Truncate to month: strftime('%Y-%m', <col_name>)
-  - Truncate to day:   date(<col_name>)
-  IMPORTANT: Replace <col_name> with the ACTUAL column name from the schema — never write the word "column".
+  - Last N days:       date('now', '-N days')
+  - Last N months:     date('now', '-N months')
+  - Last N years:      date('now', '-N years')
+  - Extract year:      strftime('%Y', col)   e.g. strftime('%Y', event_date)
+  - Extract month:     strftime('%m', col)   e.g. strftime('%m', event_date)
+  - Truncate to month: strftime('%Y-%m', col)
+  Replace col with the ACTUAL column name — never write the word "column".
 
-FORBIDDEN functions (do NOT use these — they are NOT in SQLite3):
-  EXTRACT(), date_trunc(), DATE_FORMAT(), TO_CHAR(), NOW(), GETDATE(),
-  DATE_ADD(), DATE_SUB(), DATEADD(), DATEDIFF(), interval keyword,
-  YEAR(), MONTH(), DAY(), HOUR(), TO_DATE(), CONVERT(), COALESCE is OK.
+FORBIDDEN (will cause errors):
+  JOIN, EXTRACT(), date_trunc(), DATE_FORMAT(), TO_CHAR(), NOW(), interval,
+  DATEADD(), YEAR(), MONTH(), DAY(), NULLS LAST, NULLS FIRST, ≥, ≤, ≠
 
 ### Database Schema
 {schema_ddl}
@@ -317,5 +349,6 @@ Given the database schema, here is the SQLite3 SQL query that answers [QUESTION]
         temperature=0.0,
     )
     sql = _extract_sql(raw)
+    sql = _strip_invalid_joins(sql, tables)
     sql = _fix_sqlite_compat(sql)
     return sql

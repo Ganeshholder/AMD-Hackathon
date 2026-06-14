@@ -273,7 +273,7 @@ def render() -> None:
         steps.append("🤖 Asking Router LLM to identify the relevant table")
         with st.spinner("Identifying relevant table..."):
             try:
-                tables = route(active_question)
+                tables = route(active_question, active_tables=st.session_state.active_tables)
             except Exception as e:
                 st.error(f"❌ Router error: {e}")
                 return
