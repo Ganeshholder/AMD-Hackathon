@@ -1,0 +1,1829 @@
+{
+  "bluecoat_proxy_logs": {
+    "columns": {
+      "id": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "log_id": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "event_timestamp": {
+        "type": "TIMESTAMP",
+        "unique_values": []
+      },
+      "event_date": {
+        "type": "DATE",
+        "unique_values": []
+      },
+      "client_ip": {
+        "type": "TEXT",
+        "unique_values": [
+          "10.1.1.10",
+          "10.1.1.15",
+          "10.1.2.20",
+          "10.1.2.25",
+          "10.1.3.30",
+          "10.10.1.10",
+          "10.11.1.10",
+          "10.12.1.10",
+          "10.2.1.10",
+          "10.2.1.20",
+          "10.2.2.10",
+          "10.2.2.20",
+          "10.3.1.10",
+          "10.3.1.20",
+          "10.4.1.10",
+          "10.4.1.20",
+          "10.5.1.10",
+          "10.6.1.10",
+          "10.6.1.20",
+          "10.7.1.10",
+          "10.7.1.20",
+          "10.8.1.10",
+          "10.8.1.20",
+          "10.9.1.10"
+        ]
+      },
+      "username": {
+        "type": "TEXT",
+        "unique_values": [
+          "amanda.d",
+          "ana.w",
+          "andrew.b",
+          "angela.d",
+          "anthony.d",
+          "april.h",
+          "bethany.b",
+          "brandon.m",
+          "brian.e",
+          "catherine.t",
+          "cathy.d",
+          "cathy.g",
+          "charles.d",
+          "christina.a",
+          "christopher.m",
+          "christy.w",
+          "dana.r",
+          "daniel.k",
+          "danielle.j",
+          "david.l",
+          "derek.l",
+          "donald.r",
+          "elizabeth.h",
+          "elizabeth.m",
+          "elizabeth.o",
+          "elizabeth.s",
+          "elizabeth.w",
+          "emily.d",
+          "eric.k",
+          "erika.m",
+          "grace.s",
+          "heather.h",
+          "jacqueline.j",
+          "james.g",
+          "james.s",
+          "janice.w",
+          "jessica.c",
+          "jessica.j",
+          "jessica.r",
+          "john.g",
+          "jonathan.r",
+          "joseph.j",
+          "joseph.p",
+          "joshua.d",
+          "joshua.w",
+          "judith.v",
+          "julia.v",
+          "justin.j",
+          "justin.m",
+          "kayla.o"
+        ]
+      },
+      "request_url": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "url_host": {
+        "type": "TEXT",
+        "unique_values": [
+          "amazon.com",
+          "box.com",
+          "dropbox.com",
+          "facebook.com",
+          "github.com",
+          "google.com",
+          "linkedin.com",
+          "microsoft.com",
+          "salesforce.com",
+          "slack.com",
+          "twitter.com",
+          "youtube.com"
+        ]
+      },
+      "url_path": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "http_method": {
+        "type": "TEXT",
+        "unique_values": [
+          "CONNECT",
+          "GET",
+          "POST"
+        ]
+      },
+      "proxy_action": {
+        "type": "TEXT",
+        "unique_values": [
+          "DENIED",
+          "OBSERVED",
+          "TUNNELED"
+        ]
+      },
+      "policy_group": {
+        "type": "TEXT",
+        "unique_values": [
+          "Default Policy",
+          "Guest Policy",
+          "Restricted Policy"
+        ]
+      },
+      "filter_result": {
+        "type": "TEXT",
+        "unique_values": [
+          "Allowed",
+          "Blocked",
+          "Warning"
+        ]
+      },
+      "category_name": {
+        "type": "TEXT",
+        "unique_values": [
+          "Business",
+          "File Sharing",
+          "Social",
+          "Streaming",
+          "Technology"
+        ]
+      },
+      "cache_status": {
+        "type": "TEXT",
+        "unique_values": [
+          "HIT",
+          "MISS",
+          "REFRESH"
+        ]
+      },
+      "cache_object_size_kb": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "download_duration_ms": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "ssl_tunnel": {
+        "type": "TEXT",
+        "unique_values": [
+          "No",
+          "Yes"
+        ]
+      },
+      "ssl_cipher": {
+        "type": "TEXT",
+        "unique_values": [
+          "None",
+          "TLS_AES_128_GCM_SHA256",
+          "TLS_AES_256_GCM_SHA384",
+          "TLS_CHACHA20_POLY1305_SHA256"
+        ]
+      },
+      "referrer_url": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "user_agent": {
+        "type": "TEXT",
+        "unique_values": [
+          "Chrome/136",
+          "Chrome/137",
+          "Edge/137",
+          "Firefox/140",
+          "Safari/18"
+        ]
+      },
+      "content_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "application/json",
+          "application/pdf",
+          "application/zip",
+          "image/png",
+          "text/html"
+        ]
+      },
+      "mime_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "HTML",
+          "JSON",
+          "PDF",
+          "PNG",
+          "ZIP"
+        ]
+      },
+      "threat_score": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "bandwidth_consumed_mb": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "proxy_appliance": {
+        "type": "TEXT",
+        "unique_values": [
+          "ProxySG-AMS-01",
+          "ProxySG-BER-01",
+          "ProxySG-BLR-01",
+          "ProxySG-CHI-01",
+          "ProxySG-CHN-01",
+          "ProxySG-DAL-01",
+          "ProxySG-DXB-01",
+          "ProxySG-FRA-01",
+          "ProxySG-HYD-01",
+          "ProxySG-LON-01",
+          "ProxySG-MAN-01",
+          "ProxySG-MEL-01",
+          "ProxySG-MUM-01",
+          "ProxySG-NYC-01",
+          "ProxySG-OSA-01",
+          "ProxySG-PAR-01",
+          "ProxySG-SAO-01",
+          "ProxySG-SFO-01",
+          "ProxySG-SIN-01",
+          "ProxySG-SYD-01",
+          "ProxySG-TOR-01",
+          "ProxySG-TYO-01",
+          "ProxySG-VAN-01"
+        ]
+      },
+      "location_country": {
+        "type": "TEXT",
+        "unique_values": [
+          "Australia",
+          "Brazil",
+          "Canada",
+          "France",
+          "Germany",
+          "India",
+          "Japan",
+          "Netherlands",
+          "Singapore",
+          "UAE",
+          "UK",
+          "USA"
+        ]
+      }
+    }
+  },
+  "linux_logs": {
+    "columns": {
+      "id": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "log_id": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "event_timestamp": {
+        "type": "TIMESTAMP",
+        "unique_values": []
+      },
+      "event_date": {
+        "type": "DATE",
+        "unique_values": []
+      },
+      "hostname": {
+        "type": "TEXT",
+        "unique_values": [
+          "app-dev-01",
+          "app-dev-02",
+          "app-dev-03",
+          "app-prod-01",
+          "app-prod-02",
+          "app-prod-03",
+          "backup-01",
+          "backup-02",
+          "backup-03",
+          "cache-01",
+          "cache-02",
+          "cache-03",
+          "db-dev-01",
+          "db-dev-02",
+          "db-dev-03",
+          "db-prod-01",
+          "db-prod-02",
+          "db-prod-03",
+          "monitor-01",
+          "monitor-02",
+          "monitor-03",
+          "proxy-01",
+          "proxy-02",
+          "proxy-03",
+          "web-dev-01",
+          "web-dev-02",
+          "web-dev-03",
+          "web-prod-01",
+          "web-prod-02",
+          "web-prod-03"
+        ]
+      },
+      "server_ip": {
+        "type": "TEXT",
+        "unique_values": [
+          "10.10.1.10",
+          "10.10.1.11",
+          "10.10.1.12",
+          "10.10.1.13",
+          "10.10.1.14",
+          "10.10.1.15",
+          "10.10.1.16",
+          "10.10.1.17",
+          "10.10.1.18",
+          "10.10.1.19",
+          "10.10.1.20",
+          "10.10.1.21",
+          "10.10.1.22",
+          "10.10.1.23",
+          "10.10.1.24",
+          "10.10.1.25",
+          "10.10.1.26",
+          "10.10.1.27",
+          "10.10.1.28",
+          "10.10.1.29",
+          "10.10.2.10",
+          "10.10.2.11",
+          "10.10.2.12",
+          "10.10.2.13",
+          "10.10.2.14",
+          "10.10.2.15",
+          "10.10.2.16",
+          "10.10.2.17",
+          "10.10.2.18",
+          "10.10.2.19",
+          "10.10.2.20",
+          "10.10.2.21",
+          "10.10.2.22",
+          "10.10.2.23",
+          "10.10.2.24",
+          "10.10.2.25",
+          "10.10.2.26",
+          "10.10.2.27",
+          "10.10.2.28",
+          "10.10.2.29",
+          "10.10.3.10",
+          "10.10.3.11",
+          "10.10.3.12",
+          "10.10.3.13",
+          "10.10.3.14",
+          "10.10.3.15",
+          "10.10.3.16",
+          "10.10.3.17",
+          "10.10.3.18",
+          "10.10.3.19"
+        ]
+      },
+      "username": {
+        "type": "TEXT",
+        "unique_values": [
+          "adam.r",
+          "admin",
+          "alan.s",
+          "alexander.d",
+          "alyssa.l",
+          "andrew.b",
+          "andrew.h",
+          "apache",
+          "ashley.c",
+          "barbara.j",
+          "caroline.w",
+          "chris.p",
+          "christian.s",
+          "christina.c",
+          "christine.f",
+          "christine.s",
+          "christopher.l",
+          "christopher.p",
+          "christopher.r",
+          "claire.f",
+          "dana.t",
+          "debra.w",
+          "deploy",
+          "docker",
+          "douglas.b",
+          "dr..c",
+          "george.d",
+          "heidi.c",
+          "holly.h",
+          "howard.c",
+          "james.d",
+          "james.f",
+          "james.m",
+          "jason.m",
+          "jason.w",
+          "jeffrey.p",
+          "jenkins",
+          "jennifer.h",
+          "jennifer.w",
+          "jenny.t",
+          "jesus.p",
+          "jonathan.p",
+          "joseph.c",
+          "joshua.b",
+          "julia.w",
+          "justin.m",
+          "justin.t",
+          "kelly.j",
+          "kimberly.g",
+          "kimberly.s"
+        ]
+      },
+      "process_id": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "process_name": {
+        "type": "TEXT",
+        "unique_values": [
+          "apache2",
+          "cron",
+          "dockerd",
+          "java",
+          "jenkins",
+          "mysqld",
+          "nginx",
+          "node",
+          "postgres",
+          "python3",
+          "sshd",
+          "systemd"
+        ]
+      },
+      "service_name": {
+        "type": "TEXT",
+        "unique_values": [
+          "Apache",
+          "Cron",
+          "Docker",
+          "Jenkins",
+          "MySQL",
+          "Nginx",
+          "PostgreSQL",
+          "SSH",
+          "Systemd"
+        ]
+      },
+      "log_level": {
+        "type": "TEXT",
+        "unique_values": [
+          "CRITICAL",
+          "ERROR",
+          "INFO",
+          "WARN"
+        ]
+      },
+      "event_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "File Access",
+          "Privilege Escalation",
+          "Process Start",
+          "SSH Login",
+          "Service Restart"
+        ]
+      },
+      "command_executed": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "source_ip": {
+        "type": "TEXT",
+        "unique_values": [
+          "10.0.150.125",
+          "10.0.161.96",
+          "10.0.182.149",
+          "10.1.15.183",
+          "10.1.18.176",
+          "10.1.203.106",
+          "10.1.219.196",
+          "10.1.26.218",
+          "10.1.64.31",
+          "10.10.193.246",
+          "10.10.209.245",
+          "10.10.212.209",
+          "10.10.237.227",
+          "10.10.245.100",
+          "10.10.63.77",
+          "10.100.56.244",
+          "10.100.57.230",
+          "10.100.71.243",
+          "10.101.1.35",
+          "10.101.131.55",
+          "10.101.148.220",
+          "10.101.179.88",
+          "10.101.186.52",
+          "10.101.22.143",
+          "10.101.85.254",
+          "10.102.115.7",
+          "10.102.118.196",
+          "10.102.218.90",
+          "10.102.239.200",
+          "10.102.25.128",
+          "10.102.85.9",
+          "10.103.133.118",
+          "10.103.167.106",
+          "10.103.33.28",
+          "10.104.11.163",
+          "10.104.201.49",
+          "10.104.213.254",
+          "10.104.44.133",
+          "10.105.10.142",
+          "10.105.120.57",
+          "10.105.171.245",
+          "10.105.187.214",
+          "10.105.201.105",
+          "10.105.228.201",
+          "10.106.15.35",
+          "10.106.166.90",
+          "10.106.177.63",
+          "10.106.18.98",
+          "10.106.181.19",
+          "10.106.198.200"
+        ]
+      },
+      "destination_port": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "auth_method": {
+        "type": "TEXT",
+        "unique_values": [
+          "Password",
+          "SSH Key",
+          "Sudo"
+        ]
+      },
+      "event_status": {
+        "type": "TEXT",
+        "unique_values": [
+          "Failed",
+          "Success"
+        ]
+      },
+      "cpu_usage_percent": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "memory_usage_percent": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "disk_usage_percent": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "kernel_module": {
+        "type": "TEXT",
+        "unique_values": [
+          "bridge",
+          "ext4",
+          "nfs",
+          "overlay",
+          "tcp",
+          "veth",
+          "xfs"
+        ]
+      },
+      "session_id": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "error_code": {
+        "type": "TEXT",
+        "unique_values": [
+          "ERR001",
+          "ERR002",
+          "ERR003"
+        ]
+      },
+      "log_message": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "environment": {
+        "type": "TEXT",
+        "unique_values": [
+          "DEV",
+          "PROD",
+          "UAT"
+        ]
+      },
+      "data_center": {
+        "type": "TEXT",
+        "unique_values": [
+          "Amsterdam-DC1",
+          "Bangalore-DC1",
+          "Berlin-DC1",
+          "California-DC1",
+          "Chennai-DC1",
+          "Dubai-DC1",
+          "Frankfurt-DC1",
+          "Hyderabad-DC1",
+          "London-DC1",
+          "Manchester-DC1",
+          "Melbourne-DC1",
+          "Montreal-DC1",
+          "Mumbai-DC1",
+          "Oregon-DC1",
+          "Osaka-DC1",
+          "Paris-DC1",
+          "SaoPaulo-DC1",
+          "Singapore-DC1",
+          "Sydney-DC1",
+          "Texas-DC1",
+          "Tokyo-DC1",
+          "Toronto-DC1",
+          "Virginia-DC1"
+        ]
+      },
+      "location_country": {
+        "type": "TEXT",
+        "unique_values": [
+          "Australia",
+          "Brazil",
+          "Canada",
+          "France",
+          "Germany",
+          "India",
+          "Japan",
+          "Netherlands",
+          "Singapore",
+          "UAE",
+          "UK",
+          "USA"
+        ]
+      }
+    }
+  },
+  "palo_alto_logs": {
+    "columns": {
+      "id": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "log_content": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "log_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "config",
+          "system",
+          "threat",
+          "traffic"
+        ]
+      },
+      "log_receive_time": {
+        "type": "TEXT",
+        "unique_values": [
+          "2023-06-13 20:55:02:727",
+          "2023-06-14 06:37:54:379",
+          "2023-06-14 07:16:35:474",
+          "2023-06-14 09:46:57:311",
+          "2023-06-14 11:43:22:462",
+          "2023-06-14 23:35:27:559",
+          "2023-06-15 02:16:53:303",
+          "2023-06-15 03:51:14:814",
+          "2023-06-15 04:47:22:621",
+          "2023-06-15 10:31:57:432",
+          "2023-06-15 11:08:54:218",
+          "2023-06-15 13:13:55:251",
+          "2023-06-15 13:49:24:042",
+          "2023-06-15 17:06:18:224",
+          "2023-06-15 22:50:32:664",
+          "2023-06-16 01:16:57:846",
+          "2023-06-16 03:50:38:327",
+          "2023-06-16 05:14:22:563",
+          "2023-06-16 13:25:54:628",
+          "2023-06-16 14:16:57:522",
+          "2023-06-16 16:14:17:426",
+          "2023-06-16 16:23:55:006",
+          "2023-06-16 19:04:00:321",
+          "2023-06-16 20:18:22:342",
+          "2023-06-16 22:05:30:397",
+          "2023-06-16 22:09:15:637",
+          "2023-06-16 22:54:11:574",
+          "2023-06-16 23:30:45:059",
+          "2023-06-16 23:39:55:253",
+          "2023-06-17 00:28:00:482",
+          "2023-06-17 01:24:41:016",
+          "2023-06-17 02:13:34:568",
+          "2023-06-17 06:35:19:385",
+          "2023-06-17 11:18:12:685",
+          "2023-06-17 11:36:09:979",
+          "2023-06-17 14:05:02:439",
+          "2023-06-17 18:47:39:799",
+          "2023-06-17 19:56:38:612",
+          "2023-06-18 04:12:39:523",
+          "2023-06-18 05:26:08:520",
+          "2023-06-18 10:05:44:645",
+          "2023-06-18 12:09:41:522",
+          "2023-06-18 12:31:47:795",
+          "2023-06-18 13:31:13:887",
+          "2023-06-18 13:48:04:839",
+          "2023-06-18 20:13:48:707",
+          "2023-06-18 23:20:45:658",
+          "2023-06-18 23:35:06:610",
+          "2023-06-19 04:20:41:131",
+          "2023-06-19 05:21:51:510"
+        ]
+      },
+      "log_date": {
+        "type": "TEXT",
+        "unique_values": [
+          "2023-06-13",
+          "2023-06-14",
+          "2023-06-15",
+          "2023-06-16",
+          "2023-06-17",
+          "2023-06-18",
+          "2023-06-19",
+          "2023-06-20",
+          "2023-06-21",
+          "2023-06-22",
+          "2023-06-23",
+          "2023-06-24",
+          "2023-06-25",
+          "2023-06-26",
+          "2023-06-27",
+          "2023-06-28",
+          "2023-06-29",
+          "2023-06-30",
+          "2023-07-01",
+          "2023-07-02",
+          "2023-07-03",
+          "2023-07-04",
+          "2023-07-05",
+          "2023-07-06",
+          "2023-07-07",
+          "2023-07-08",
+          "2023-07-09",
+          "2023-07-10",
+          "2023-07-11",
+          "2023-07-12",
+          "2023-07-13",
+          "2023-07-14",
+          "2023-07-15",
+          "2023-07-16",
+          "2023-07-17",
+          "2023-07-18",
+          "2023-07-19",
+          "2023-07-20",
+          "2023-07-21",
+          "2023-07-22",
+          "2023-07-23",
+          "2023-07-24",
+          "2023-07-25",
+          "2023-07-26",
+          "2023-07-27",
+          "2023-07-28",
+          "2023-07-29",
+          "2023-07-30",
+          "2023-07-31",
+          "2023-08-01"
+        ]
+      },
+      "threat_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "add",
+          "commit",
+          "data",
+          "delete",
+          "deny",
+          "dhcp",
+          "drop",
+          "edit",
+          "end",
+          "file",
+          "forward",
+          "general",
+          "ha",
+          "monitoring",
+          "routing",
+          "spyware",
+          "start",
+          "url",
+          "virus",
+          "vpn",
+          "vulnerability",
+          "wildfire"
+        ]
+      },
+      "src_ip_address": {
+        "type": "TEXT",
+        "unique_values": [
+          "10.100.11.144",
+          "10.100.12.10",
+          "10.100.12.217",
+          "10.100.13.153",
+          "10.100.14.105",
+          "10.100.14.61",
+          "10.100.15.162",
+          "10.100.2.150",
+          "10.100.3.209",
+          "10.100.6.112",
+          "10.100.7.114",
+          "10.100.7.155",
+          "10.100.7.36",
+          "10.100.8.51",
+          "10.100.8.76",
+          "10.100.8.96",
+          "10.100.9.168",
+          "10.101.0.220",
+          "10.101.0.65",
+          "10.101.1.159",
+          "10.101.1.73",
+          "10.101.11.246",
+          "10.101.11.67",
+          "10.101.11.94",
+          "10.101.12.162",
+          "10.101.13.134",
+          "10.101.13.182",
+          "10.101.13.91",
+          "10.101.14.21",
+          "10.101.2.146",
+          "10.101.2.151",
+          "10.101.2.163",
+          "10.101.2.75",
+          "10.101.3.124",
+          "10.101.3.218",
+          "10.101.4.45",
+          "10.101.5.146",
+          "10.101.7.163",
+          "10.101.7.6",
+          "10.101.8.107",
+          "10.101.9.99",
+          "10.102.0.215",
+          "10.102.0.81",
+          "10.102.1.137",
+          "10.102.11.238",
+          "10.102.11.48",
+          "10.102.12.247",
+          "10.102.12.30",
+          "10.102.12.31",
+          "10.102.12.57"
+        ]
+      },
+      "dst_ip_address": {
+        "type": "TEXT",
+        "unique_values": [
+          "1.158.166.136",
+          "1.163.47.248",
+          "1.17.107.136",
+          "1.17.44.23",
+          "1.173.9.246",
+          "1.2.178.195",
+          "1.208.227.86",
+          "1.227.197.180",
+          "1.247.171.196",
+          "1.254.121.28",
+          "10.100.1.101",
+          "10.100.1.166",
+          "10.100.1.245",
+          "10.100.1.34",
+          "10.100.11.70",
+          "10.100.13.106",
+          "10.100.13.175",
+          "10.100.14.34",
+          "10.100.14.56",
+          "10.100.14.73",
+          "10.100.15.32",
+          "10.100.2.85",
+          "10.100.3.128",
+          "10.100.3.6",
+          "10.100.5.6",
+          "10.100.6.154",
+          "10.100.6.161",
+          "10.100.7.252",
+          "10.100.7.31",
+          "10.101.0.251",
+          "10.101.0.30",
+          "10.101.10.242",
+          "10.101.11.10",
+          "10.101.11.53",
+          "10.101.12.74",
+          "10.101.3.132",
+          "10.101.3.167",
+          "10.101.3.20",
+          "10.101.3.23",
+          "10.101.3.54",
+          "10.101.3.70",
+          "10.101.4.163",
+          "10.101.4.215",
+          "10.101.7.78",
+          "10.101.9.199",
+          "10.102.0.154",
+          "10.102.0.83",
+          "10.102.1.108",
+          "10.102.1.121",
+          "10.102.1.150"
+        ]
+      },
+      "application_nm": {
+        "type": "TEXT",
+        "unique_values": [
+          "dns-base",
+          "dropbox",
+          "facebook",
+          "ftp",
+          "general-internet",
+          "google-base",
+          "http",
+          "kerberose",
+          "ldap",
+          "management",
+          "n/a",
+          "not-applicable",
+          "ntp",
+          "office365",
+          "ping",
+          "rdp",
+          "smtp",
+          "snmp",
+          "ssh",
+          "ssl",
+          "system",
+          "web-browsing",
+          "youtube"
+        ]
+      },
+      "src_port": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "dest_port": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "ip_protocol": {
+        "type": "TEXT",
+        "unique_values": [
+          "icmp",
+          "tcp",
+          "udp"
+        ]
+      },
+      "type_of_action": {
+        "type": "TEXT",
+        "unique_values": [
+          "alert",
+          "allow",
+          "block",
+          "deny",
+          "drop",
+          "n/a",
+          "reset-both",
+          "reset-client"
+        ]
+      },
+      "category": {
+        "type": "TEXT",
+        "unique_values": [
+          "any",
+          "business-and-economy",
+          "command-and-control",
+          "computer-and-internet-info",
+          "configuration",
+          "general",
+          "malware",
+          "management",
+          "n/a",
+          "news",
+          "not-resolved",
+          "phishing",
+          "private-ip-addresses",
+          "search-engines",
+          "social-networking",
+          "system",
+          "unknown"
+        ]
+      },
+      "app_risk_lvl": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "bytes_sent": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "bytes_received": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "src_action": {
+        "type": "TEXT",
+        "unique_values": [
+          "from-policy",
+          "n/a",
+          "pbf-from-policy",
+          "to-policy"
+        ]
+      }
+    }
+  },
+  "ping_identity_logs": {
+    "columns": {
+      "id": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "log_id": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "event_timestamp": {
+        "type": "TIMESTAMP",
+        "unique_values": []
+      },
+      "event_date": {
+        "type": "DATE",
+        "unique_values": []
+      },
+      "user_id": {
+        "type": "TEXT",
+        "unique_values": [
+          "U1001",
+          "U1002",
+          "U1003",
+          "U1004",
+          "U1005",
+          "U1006",
+          "U1007",
+          "U1008",
+          "U1009",
+          "U1010",
+          "U1011",
+          "U1012",
+          "U1013",
+          "U1014",
+          "U1015",
+          "U1016",
+          "U1017",
+          "U1018",
+          "U1019",
+          "U1020",
+          "U1021",
+          "U1022",
+          "U1023",
+          "U1024",
+          "U1025",
+          "U1026",
+          "U1027",
+          "U1028",
+          "U1029",
+          "U1030",
+          "U1031",
+          "U1032",
+          "U1033",
+          "U1034",
+          "U1035",
+          "U1036",
+          "U1037",
+          "U1038",
+          "U1039",
+          "U1040",
+          "U1041",
+          "U1042",
+          "U1043",
+          "U1044",
+          "U1045",
+          "U1046",
+          "U1047",
+          "U1048",
+          "U1049",
+          "U1050"
+        ]
+      },
+      "username": {
+        "type": "TEXT",
+        "unique_values": [
+          "aaron.w",
+          "alexander.m",
+          "amanda.c",
+          "andrea.c",
+          "andrea.t",
+          "ann.g",
+          "ann.o",
+          "anna.w",
+          "anne.d",
+          "anthony.f",
+          "antonio.s",
+          "ariana.j",
+          "ashley.c",
+          "benjamin.l",
+          "beth.m",
+          "brandon.a",
+          "brenda.t",
+          "brent.c",
+          "brian.d",
+          "brian.h",
+          "brittney.b",
+          "carol.c",
+          "chad.l",
+          "connor.y",
+          "craig.r",
+          "crystal.h",
+          "cynthia.t",
+          "dana.b",
+          "danielle.r",
+          "david.a",
+          "david.t",
+          "deborah.k",
+          "derrick.d",
+          "dorothy.c",
+          "frances.y",
+          "gina.g",
+          "haley.s",
+          "jacob.p",
+          "james.b",
+          "jamie.b",
+          "jasmine.b",
+          "jason.b",
+          "jeffrey.m",
+          "jessica.w",
+          "john.s",
+          "johnny.d",
+          "jon.c",
+          "joseph.f",
+          "joseph.s",
+          "julia.p"
+        ]
+      },
+      "email": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "ip_address": {
+        "type": "TEXT",
+        "unique_values": [
+          "1.1.45.145",
+          "1.12.228.77",
+          "1.158.144.226",
+          "1.219.157.191",
+          "1.226.136.6",
+          "1.236.54.218",
+          "1.242.96.187",
+          "1.250.63.206",
+          "1.30.176.149",
+          "1.58.203.28",
+          "1.68.39.26",
+          "1.82.95.33",
+          "1.91.174.180",
+          "1.99.107.238",
+          "10.0.0.123",
+          "10.0.0.124",
+          "10.0.0.183",
+          "10.0.0.228",
+          "10.0.0.28",
+          "10.0.0.32",
+          "10.0.0.48",
+          "10.0.0.72",
+          "10.0.0.78",
+          "10.0.0.84",
+          "10.0.1.145",
+          "10.0.1.177",
+          "10.0.1.191",
+          "10.0.1.202",
+          "10.0.1.223",
+          "10.0.10.119",
+          "10.0.10.124",
+          "10.0.10.226",
+          "10.0.10.234",
+          "10.0.10.254",
+          "10.0.10.55",
+          "10.0.10.67",
+          "10.0.10.95",
+          "10.0.11.10",
+          "10.0.11.149",
+          "10.0.11.158",
+          "10.0.11.170",
+          "10.0.11.171",
+          "10.0.11.21",
+          "10.0.11.219",
+          "10.0.11.22",
+          "10.0.11.249",
+          "10.0.11.48",
+          "10.0.11.53",
+          "10.0.11.55",
+          "10.0.11.56"
+        ]
+      },
+      "device_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "Desktop",
+          "Laptop",
+          "Mobile",
+          "Tablet"
+        ]
+      },
+      "operating_system": {
+        "type": "TEXT",
+        "unique_values": [
+          "Android",
+          "Linux",
+          "Windows",
+          "iOS",
+          "macOS"
+        ]
+      },
+      "browser_name": {
+        "type": "TEXT",
+        "unique_values": [
+          "Brave",
+          "Chrome",
+          "Edge",
+          "Firefox",
+          "Safari"
+        ]
+      },
+      "application_name": {
+        "type": "TEXT",
+        "unique_values": [
+          "AWS Console",
+          "Azure Portal",
+          "Confluence",
+          "GitHub",
+          "Jira",
+          "Salesforce",
+          "ServiceNow",
+          "Slack",
+          "Snowflake",
+          "Workday"
+        ]
+      },
+      "authentication_method": {
+        "type": "TEXT",
+        "unique_values": [
+          "MFA",
+          "OAuth",
+          "Password",
+          "SSO"
+        ]
+      },
+      "event_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "Login",
+          "Logout",
+          "MFA Challenge",
+          "Password Reset"
+        ]
+      },
+      "event_status": {
+        "type": "TEXT",
+        "unique_values": [
+          "Failed",
+          "Success"
+        ]
+      },
+      "failure_reason": {
+        "type": "TEXT",
+        "unique_values": [
+          "Account Locked",
+          "Device Not Registered",
+          "Invalid Password",
+          "MFA Failed",
+          "Session Expired",
+          "Session Timeout",
+          "Token Expired"
+        ]
+      },
+      "session_id": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "location_country": {
+        "type": "TEXT",
+        "unique_values": [
+          "Australia",
+          "Brazil",
+          "Canada",
+          "France",
+          "Germany",
+          "India",
+          "Japan",
+          "Netherlands",
+          "Singapore",
+          "UAE",
+          "UK",
+          "USA"
+        ]
+      },
+      "location_city": {
+        "type": "TEXT",
+        "unique_values": [
+          "Abu Dhabi",
+          "Amsterdam",
+          "Austin",
+          "Bangalore",
+          "Berlin",
+          "Birmingham",
+          "Boston",
+          "Brasília",
+          "Brisbane",
+          "Bristol",
+          "Calgary",
+          "Chennai",
+          "Chicago",
+          "Cologne",
+          "Delhi",
+          "Dubai",
+          "Edinburgh",
+          "Frankfurt",
+          "Hamburg",
+          "Hyderabad",
+          "Kolkata",
+          "London",
+          "Los Angeles",
+          "Lyon",
+          "Manchester",
+          "Marseille",
+          "Melbourne",
+          "Montreal",
+          "Mumbai",
+          "Munich",
+          "Nagoya",
+          "New York",
+          "Osaka",
+          "Paris",
+          "Perth",
+          "Pune",
+          "Rio de Janeiro",
+          "Rotterdam",
+          "San Francisco",
+          "Seattle",
+          "Sharjah",
+          "Singapore",
+          "Sydney",
+          "São Paulo",
+          "Tokyo",
+          "Toronto",
+          "Toulouse",
+          "Utrecht",
+          "Vancouver",
+          "Yokohama"
+        ]
+      },
+      "risk_score": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "mfa_status": {
+        "type": "TEXT",
+        "unique_values": [
+          "Failed",
+          "Not Required",
+          "Passed"
+        ]
+      }
+    }
+  },
+  "zscaler_logs": {
+    "columns": {
+      "id": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "log_id": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "event_timestamp": {
+        "type": "TIMESTAMP",
+        "unique_values": []
+      },
+      "event_date": {
+        "type": "DATE",
+        "unique_values": []
+      },
+      "username": {
+        "type": "TEXT",
+        "unique_values": [
+          "alicia.n",
+          "amanda.w",
+          "amy.p",
+          "barbara.c",
+          "beth.w",
+          "brenda.h",
+          "brittney.g",
+          "bryan.t",
+          "casey.w",
+          "cassandra.w",
+          "christina.h",
+          "cindy.m",
+          "cory.t",
+          "craig.p",
+          "daniel.a",
+          "david.d",
+          "dawn.h",
+          "debra.g",
+          "dennis.o",
+          "derrick.b",
+          "desiree.g",
+          "don.c",
+          "dr..f",
+          "edward.d",
+          "edward.h",
+          "eileen.l",
+          "erin.m",
+          "ernest.o",
+          "gene.c",
+          "gloria.b",
+          "howard.a",
+          "james.d",
+          "jamie.c",
+          "janet.w",
+          "jasmine.m",
+          "jeffery.b",
+          "jeffrey.a",
+          "jeffrey.m",
+          "jeffrey.p",
+          "jennifer.p",
+          "jerry.t",
+          "jessica.s",
+          "jorge.p",
+          "joseph.b",
+          "joseph.r",
+          "joshua.b",
+          "joshua.d",
+          "joshua.r",
+          "julia.g",
+          "julie.l"
+        ]
+      },
+      "email": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "source_ip": {
+        "type": "TEXT",
+        "unique_values": [
+          "10.0.0.1",
+          "10.0.0.10",
+          "10.0.0.100",
+          "10.0.0.11",
+          "10.0.0.12",
+          "10.0.0.13",
+          "10.0.0.14",
+          "10.0.0.15",
+          "10.0.0.16",
+          "10.0.0.17",
+          "10.0.0.18",
+          "10.0.0.19",
+          "10.0.0.2",
+          "10.0.0.20",
+          "10.0.0.21",
+          "10.0.0.22",
+          "10.0.0.23",
+          "10.0.0.24",
+          "10.0.0.25",
+          "10.0.0.26",
+          "10.0.0.27",
+          "10.0.0.28",
+          "10.0.0.29",
+          "10.0.0.3",
+          "10.0.0.30",
+          "10.0.0.31",
+          "10.0.0.32",
+          "10.0.0.33",
+          "10.0.0.34",
+          "10.0.0.35",
+          "10.0.0.36",
+          "10.0.0.37",
+          "10.0.0.38",
+          "10.0.0.39",
+          "10.0.0.4",
+          "10.0.0.40",
+          "10.0.0.41",
+          "10.0.0.42",
+          "10.0.0.43",
+          "10.0.0.44",
+          "10.0.0.45",
+          "10.0.0.46",
+          "10.0.0.47",
+          "10.0.0.48",
+          "10.0.0.49",
+          "10.0.0.5",
+          "10.0.0.50",
+          "10.0.0.51",
+          "10.0.0.52",
+          "10.0.0.53"
+        ]
+      },
+      "destination_ip": {
+        "type": "TEXT",
+        "unique_values": [
+          "172.16.1.10",
+          "172.16.1.100",
+          "172.16.1.101",
+          "172.16.1.103",
+          "172.16.1.104",
+          "172.16.1.105",
+          "172.16.1.106",
+          "172.16.1.107",
+          "172.16.1.108",
+          "172.16.1.109",
+          "172.16.1.11",
+          "172.16.1.110",
+          "172.16.1.111",
+          "172.16.1.112",
+          "172.16.1.113",
+          "172.16.1.114",
+          "172.16.1.115",
+          "172.16.1.116",
+          "172.16.1.117",
+          "172.16.1.118",
+          "172.16.1.12",
+          "172.16.1.120",
+          "172.16.1.121",
+          "172.16.1.122",
+          "172.16.1.123",
+          "172.16.1.125",
+          "172.16.1.127",
+          "172.16.1.129",
+          "172.16.1.13",
+          "172.16.1.130",
+          "172.16.1.131",
+          "172.16.1.132",
+          "172.16.1.133",
+          "172.16.1.134",
+          "172.16.1.135",
+          "172.16.1.136",
+          "172.16.1.138",
+          "172.16.1.139",
+          "172.16.1.140",
+          "172.16.1.141",
+          "172.16.1.143",
+          "172.16.1.146",
+          "172.16.1.147",
+          "172.16.1.149",
+          "172.16.1.15",
+          "172.16.1.150",
+          "172.16.1.152",
+          "172.16.1.154",
+          "172.16.1.155",
+          "172.16.1.156"
+        ]
+      },
+      "url": {
+        "type": "TEXT",
+        "unique_values": []
+      },
+      "domain": {
+        "type": "TEXT",
+        "unique_values": [
+          "amazon.com",
+          "box.com",
+          "dropbox.com",
+          "facebook.com",
+          "github.com",
+          "google.com",
+          "linkedin.com",
+          "microsoft.com",
+          "onedrive.com",
+          "reddit.com",
+          "salesforce.com",
+          "slack.com",
+          "twitter.com",
+          "youtube.com",
+          "zoom.us"
+        ]
+      },
+      "web_category": {
+        "type": "TEXT",
+        "unique_values": [
+          "Business Apps",
+          "File Sharing",
+          "Shopping",
+          "Social Networking",
+          "Streaming",
+          "Technology"
+        ]
+      },
+      "action": {
+        "type": "TEXT",
+        "unique_values": [
+          "Allowed",
+          "Blocked"
+        ]
+      },
+      "ssl_inspection_status": {
+        "type": "TEXT",
+        "unique_values": [
+          "Bypassed",
+          "Inspected"
+        ]
+      },
+      "bandwidth_mb": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "threat_detected": {
+        "type": "TEXT",
+        "unique_values": [
+          "No",
+          "Yes"
+        ]
+      },
+      "threat_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "Botnet",
+          "Malware",
+          "None",
+          "Phishing",
+          "Spyware"
+        ]
+      },
+      "policy_rule": {
+        "type": "TEXT",
+        "unique_values": [
+          "Default Policy",
+          "File Download Control",
+          "High Risk Block",
+          "Social Media Block",
+          "Streaming Limit"
+        ]
+      },
+      "cloud_app": {
+        "type": "TEXT",
+        "unique_values": [
+          "Box",
+          "Dropbox",
+          "GitHub",
+          "Google Workspace",
+          "Microsoft365",
+          "Salesforce",
+          "ServiceNow",
+          "Slack",
+          "Workday",
+          "Zoom"
+        ]
+      },
+      "file_download": {
+        "type": "TEXT",
+        "unique_values": [
+          "No",
+          "Yes"
+        ]
+      },
+      "file_type": {
+        "type": "TEXT",
+        "unique_values": [
+          "CSV",
+          "DOCX",
+          "EXE",
+          "JS",
+          "MP4",
+          "None",
+          "PDF",
+          "PNG",
+          "PY",
+          "XLSX",
+          "ZIP"
+        ]
+      },
+      "location": {
+        "type": "TEXT",
+        "unique_values": [
+          "Abu Dhabi",
+          "Amsterdam",
+          "Austin",
+          "Bangalore",
+          "Berlin",
+          "Brisbane",
+          "Chennai",
+          "Chicago",
+          "Delhi",
+          "Dubai",
+          "Edinburgh",
+          "Frankfurt",
+          "Hyderabad",
+          "London",
+          "Lyon",
+          "Manchester",
+          "Melbourne",
+          "Montreal",
+          "Mumbai",
+          "Munich",
+          "New York",
+          "Osaka",
+          "Paris",
+          "Pune",
+          "Rio de Janeiro",
+          "Rotterdam",
+          "San Francisco",
+          "Seattle",
+          "Singapore",
+          "Sydney",
+          "São Paulo",
+          "Tokyo",
+          "Toronto",
+          "Vancouver"
+        ]
+      },
+      "department": {
+        "type": "TEXT",
+        "unique_values": [
+          "Engineering",
+          "Finance",
+          "HR",
+          "IT",
+          "Legal",
+          "Marketing",
+          "Operations",
+          "R&D",
+          "Sales",
+          "Support"
+        ]
+      },
+      "device_posture": {
+        "type": "TEXT",
+        "unique_values": [
+          "Compliant",
+          "Non-Compliant"
+        ]
+      },
+      "zscaler_node": {
+        "type": "TEXT",
+        "unique_values": [
+          "AE-DXB-01",
+          "AU-MEL-01",
+          "AU-SYD-01",
+          "BR-SAO-01",
+          "CA-TOR-01",
+          "CA-VAN-01",
+          "DE-BER-01",
+          "DE-MUC-01",
+          "FR-PAR-01",
+          "IN-BLR-01",
+          "IN-HYD-01",
+          "IN-MAA-01",
+          "IN-MUM-01",
+          "JP-OSA-01",
+          "JP-TYO-01",
+          "NL-AMS-01",
+          "SG-SIN-01",
+          "UK-LON-01",
+          "UK-MAN-01",
+          "US-AUS-01",
+          "US-CHI-01",
+          "US-NYC-01",
+          "US-SFO-01"
+        ]
+      },
+      "session_duration_sec": {
+        "type": "INTEGER",
+        "unique_values": []
+      },
+      "risk_score": {
+        "type": "REAL",
+        "unique_values": []
+      },
+      "location_country": {
+        "type": "TEXT",
+        "unique_values": [
+          "Australia",
+          "Brazil",
+          "Canada",
+          "France",
+          "Germany",
+          "India",
+          "Japan",
+          "Netherlands",
+          "Singapore",
+          "UAE",
+          "UK",
+          "USA"
+        ]
+      }
+    }
+  }
+}

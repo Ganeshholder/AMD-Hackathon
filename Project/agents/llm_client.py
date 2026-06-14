@@ -72,13 +72,16 @@ def generate(
     prompt: str,
     max_new_tokens: int = 300,
     temperature: float = 0.0,
+    do_sample: bool = False,
 ) -> str:
     """
     text_generation for raw-prompt models (sqlcoder-7b-2).
+    Use do_sample=False as recommended by defog for deterministic output.
     """
     response = client.text_generation(
         prompt,
         max_new_tokens=max_new_tokens,
         temperature=temperature,
+        do_sample=do_sample,
     )
     return response.strip()

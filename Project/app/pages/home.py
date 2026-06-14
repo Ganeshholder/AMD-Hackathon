@@ -173,6 +173,8 @@ def _run_pipeline(question: str, tables: list[str], steps: list[str]) -> None:
     with st.spinner("Generating SQL..."):
         try:
             sql = generate_sql(question, tables)
+            steps.append("🔍 Cross-checking SQL with Qwen validator")
+            steps.append("✅ SQL validated and corrected if needed")
         except Exception as e:
             st.error(f"❌ SQL generation error: {e}")
             return
